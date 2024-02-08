@@ -4,16 +4,15 @@ from googleapiclient.discovery import build
 
 
 class Channel:
-    """Класс для ютуб-канала"""
+    """Класс для YouTube-канала"""
 
     def __init__(self, channel_id: str) -> None:
-        """Экземпляр инициализируется id канала. Дальше все данные будут подтягиваться по API."""
+        """
+        Экземпляр инициализируется по id канала.
+        Дальше все данные будут подтягиваться по API.
+        """
         self.__channel_id = channel_id
-        youtube = self.get_service()
-        response = youtube.channels().list(
-            id=self.__channel_id,
-            part='snippet,statistics'
-        ).execute()
+        response = self.get_info_about_channel()
         self.title = response['items'][0]['snippet']['title']
         self.description = response['items'][0]['snippet']['description']
         self.url = 'https://www.youtube.com/channel/' + response['items'][0]['id']
@@ -42,25 +41,25 @@ class Channel:
 
     def __lt__(self, other):
         """
-        Проверяет, является ли количество подписиков канала1 меньше подписчиков канала2
+        Проверяет, является ли количество подписчиков канала1 меньше подписчиков канала2
         """
         return self.subscriber_count < other.subscriber_count
 
     def __le__(self, other):
         """
-        Проверяет, является ли количество подписиков канала1 меньше или равно подписчиков канала2
+        Проверяет, является ли количество подписчиков канала1 меньше или равно подписчиков канала2
         """
         return self.subscriber_count <= other.subscriber_count
 
     def __gt__(self, other):
         """
-        Проверяет, является ли количество подписиков канала1 больше подписчиков канала2
+        Проверяет, является ли количество подписчиков канала1 больше подписчиков канала2
         """
         return self.subscriber_count > other.subscriber_count
 
     def __ge__(self, other):
         """
-        Проверяет, является ли количество подписиков канала1 больше или равно подписчиков канала2
+        Проверяет, является ли количество подписчиков канала1 больше или равно подписчиков канала2
         """
         return self.subscriber_count >= other.subscriber_count
 
@@ -74,12 +73,17 @@ class Channel:
     def channel_id(self):
         return self.__channel_id
 
-    def print_info(self) -> None:
-        """Выводит в консоль информацию о канале."""
-        response = self.youtube.channels().list(
+    def get_info_about_channel(self):
+        """Получает информацию о канале."""
+        youtube = self.get_service()
+        return youtube.channels().list(
             id=self.__channel_id,
             part='snippet,statistics'
         ).execute()
+
+    def print_info_about_channel(self) -> None:
+        """Выводит в консоль информацию о канале."""
+        response = self.get_info_about_channel()
         print(json.dumps(response, indent=2, ensure_ascii=False))
 
     @classmethod
