@@ -1,4 +1,4 @@
-from src.channel import MixinYouTube
+from src.youtube import MixinYouTube
 
 
 class Video(MixinYouTube):
@@ -8,6 +8,7 @@ class Video(MixinYouTube):
         Экземпляр инициализируется по id видео.
         Дальше все данные будут подтягиваться по API.
         """
+        super().__init__()
         self.video_id = video_id
         video_response = self.get_info_about_video()
         self.video_title: str = video_response['items'][0]['snippet']['title']
