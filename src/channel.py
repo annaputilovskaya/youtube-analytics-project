@@ -1,20 +1,6 @@
 import json
-import os
-from googleapiclient.discovery import build
 
-
-class MixinYouTube:
-    """Вспомогательный класс для работы с YouTube API"""
-    def __init__(self):
-        pass
-
-    @classmethod
-    def get_service(cls):
-        """
-        Возвращает объект для работы с YouTube API
-        """
-        api_key: str = os.getenv('YT_API_KEY')
-        return build('youtube', 'v3', developerKey=api_key)
+from src.youtube import MixinYouTube
 
 
 class Channel(MixinYouTube):
@@ -25,6 +11,7 @@ class Channel(MixinYouTube):
         Экземпляр инициализируется по id канала.
         Дальше все данные будут подтягиваться по API.
         """
+        super().__init__()
         self.__channel_id = channel_id
         response = self.get_info_about_channel()
         self.title = response['items'][0]['snippet']['title']
