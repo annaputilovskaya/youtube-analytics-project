@@ -1,7 +1,7 @@
-from src.channel import Channel
+from src.channel import MixinYouTube
 
 
-class Video:
+class Video(MixinYouTube):
     """Класс для видео с YouTube"""
     def __init__(self, video_id):
         """
@@ -24,7 +24,7 @@ class Video:
 
     def get_info_about_video(self):
         """Получает информацию о видео"""
-        youtube = Channel.get_service()
+        youtube = self.get_service()
         return youtube.videos().list(
             part='snippet,statistics,contentDetails,topicDetails',
             id=self.video_id
