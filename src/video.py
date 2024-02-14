@@ -11,17 +11,23 @@ class Video(MixinYouTube):
         super().__init__()
         self.video_id = video_id
         video_response = self.get_info_about_video()
-        self.video_title: str = video_response['items'][0]['snippet']['title']
-        self.video_url = f'https: // www.youtube.com / watch?v = {self.video_id}'
-        self.view_count: int = video_response['items'][0]['statistics']['viewCount']
-        self.like_count: int = video_response['items'][0]['statistics']['likeCount']
+        try:
+            self.title: str = video_response['items'][0]['snippet']['title']
+            self.url = f'https: // www.youtube.com / watch?v = {self.video_id}'
+            self.view_count: int = video_response['items'][0]['statistics']['viewCount']
+            self.like_count: int = video_response['items'][0]['statistics']['likeCount']
+        except LookupError:
+            self.title = None
+            self.url = None
+            self.view_count = None
+            self.like_count = None
 
     def __str__(self):
         """
         Отображает информацию о видео для пользователей
         :return: <название_видео>
         """
-        return self.video_title
+        return self.title
 
     def get_info_about_video(self):
         """Получает информацию о видео"""
